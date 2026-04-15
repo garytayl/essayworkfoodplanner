@@ -12,8 +12,9 @@ Data is stored with **Drizzle ORM** and **libSQL** (SQLite-compatible). Copy [.e
 
 | Environment | Typical `DATABASE_URL` |
 |---------------|-------------------------|
-| Local dev | `file:./local.db` (or omit; the app falls back to `file:local.db` in code—keep one convention per machine) |
-| Hosted (e.g. Turso) | `libsql://…` URL with auth token from your provider |
+| Local dev | `file:./local.db` (or omit; the app defaults to this when not on hosted Vercel) |
+| Vercel (production) | **Required:** a remote libSQL URL (e.g. [Turso](https://turso.tech)). File-based SQLite does not work on Vercel serverless. Add `DATABASE_URL` under Project → Settings → Environment Variables, then run migrations against that database. |
+| Other hosted (e.g. Turso) | `libsql://…` URL with auth token from your provider |
 
 Apply migrations after cloning or changing schema:
 

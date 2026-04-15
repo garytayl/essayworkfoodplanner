@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 
-import { db } from "@/db";
+import { requireDb } from "@/db";
 import {
   essays,
   mealDays,
@@ -26,6 +26,7 @@ function refresh() {
 }
 
 export async function upsertEssay(raw: unknown) {
+  const db = requireDb();
   const input = essayUpsertSchema.parse(raw);
   const id = crypto.randomUUID();
 
@@ -53,6 +54,7 @@ export async function upsertEssay(raw: unknown) {
 }
 
 export async function replaceTasksForWeek(raw: unknown) {
+  const db = requireDb();
   const input = tasksReplaceSchema.parse(raw);
 
   await db.delete(tasks).where(eq(tasks.weekStart, input.weekStart));
@@ -77,6 +79,7 @@ export async function replaceTasksForWeek(raw: unknown) {
 }
 
 export async function saveMealDays(raw: unknown) {
+  const db = requireDb();
   const input = mealDaysSaveSchema.parse(raw);
 
   await db.delete(mealDays).where(eq(mealDays.weekStart, input.weekStart));
@@ -96,6 +99,7 @@ export async function saveMealDays(raw: unknown) {
 }
 
 export async function createRestaurant(raw: unknown) {
+  const db = requireDb();
   const input = restaurantCreateSchema.parse(raw);
   const id = crypto.randomUUID();
   await db.insert(restaurants).values({
@@ -109,12 +113,14 @@ export async function createRestaurant(raw: unknown) {
 }
 
 export async function deleteRestaurant(raw: unknown) {
+  const db = requireDb();
   const input = restaurantDeleteSchema.parse(raw);
   await db.delete(restaurants).where(eq(restaurants.id, input.id));
   refresh();
 }
 
 export async function setRestaurantPick(raw: unknown) {
+  const db = requireDb();
   const input = restaurantPickSchema.parse(raw);
 
   if (input.restaurantId === null) {

@@ -1,3 +1,4 @@
+import { DbSetupBanner } from "@/components/db-setup-banner";
 import { EssayPanel } from "@/components/essay-panel";
 import { MealRow } from "@/components/meal-row";
 import { RestaurantPicker } from "@/components/restaurant-picker";
@@ -33,6 +34,8 @@ export default async function Home({ searchParams }: PageProps) {
           food stay in sync.
         </p>
       </header>
+
+      <DbSetupBanner data={data} />
 
       <WeekNav weekStart={weekStart} />
 
